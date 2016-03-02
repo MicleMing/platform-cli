@@ -1,0 +1,109 @@
+#!/usr/bin/env node
+
+var logger = require('../lib/logger');
+var request = require('request')
+var chalk = require('chalk')
+var path = require ('path');
+var fs = require ('fs');
+var mkdirp = require ('mkdirp');
+
+var BOILERLATER_DIR	= '../vue-boilerplate';
+var BOILERLATER_CONFIG = '../vue-boilerplate/config.json';
+
+process.on('exit', function () {
+	console.log();
+});
+
+var program = require('commander');
+
+program
+	.usage('make <type> [name]')
+	.option('-l, --list', 'list available generators and usage examples')
+	.parse(process.argv);
+
+program.on('--help', function () {
+    console.log('  Examples:');
+    console.log();
+    console.log(chalk.gray('    # create a new component'));
+    console.log('    $ platform make component myComponent');
+    console.log();
+    console.log(chalk.gray('    # create a new page '));
+    console.log('    $ platform make page myPage');
+    console.log();
+});
+
+if (program.list) {
+	// 列出可用命令
+	getCommandList();
+}
+else if (program.args.length > 1) {
+	// generate
+	// make component wt1
+	generateFile(program.args[1], program.args[2]);
+}
+else {
+	program.help();
+}
+
+
+function getCommandList () {
+	var config = fs.readFileSync(BOILERLATER_CONFIG);
+	try {
+		config = JSON.parse(config);
+	} catch (e) {
+		console.log(chalk.red('Error:'));
+		console.log(e);
+	}
+	console.log();
+	console.log(chalk.gray('======================================================'));
+	for (var key in config) {
+		console.log(key.charAt(0).toUpperCase() + key.substring(1));
+		if (config.hasOwnProperty(key)) {
+			console.log(chalk.gray('    #' + 'desc: ') + config[key].desc);
+			console.log(chalk.gray('    #' + 'sample: ')+ config[key].example);
+		}
+	}
+	console.log(chalk.gray('======================================================'));
+}
+
+function generateFile (type, name) {
+	var config = JSON.parse(fs.readFileSync(BOILERLATER_CONFIG));
+
+	var cwd = process.cwd();
+
+	if (!config.hasOwnProperty(type)) {
+		logger.fatal('Unkown generate type: ' + type);
+		return;
+	}
+
+	var genObj = config[type];
+	var genSourcePath = path.join(BOILERLATER_DIR, genObj['file']);
+
+	try {
+		var source = fs.readFileSync(genSourcePath);
+	} catch (e) {
+		logger.fatal('Error: ' + e);
+	}
+
+	var type = genObj['type'];
+	var reg = new RegExp(type + '$');
+	if (!reg.test(name)) {
+		name = name + '.vue';
+	}
+
+	var targetFilePath = path.join(cwd, name);
+	var targetDir = path.dirname(targetFilePath);
+
+	if (!fs.existsSync(targetDir)) {
+		mkdirp(targetDir);
+	}
+	if (fs.existsSync(targetFilePath)) {
+		console.warn('operation fail, because this file has exists');
+	}
+	else {
+		fs.writeFileSync(targetFilePath, fs.readFileSync(genSourcePath));
+		logger.success('Create: ' + chalk.green(name));
+	}
+
+}
+

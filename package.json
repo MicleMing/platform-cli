@@ -1,0 +1,22 @@
+{
+  "name": "platform-cli",
+  "version": "1.0.0",
+  "description": "generator project prototype",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "platform"
+  ],
+  "author": "lanmingming",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^1.1.1",
+    "commander": "^2.9.0",
+    "download-git-repo": "^0.1.1",
+    "mkdirp": "^0.5.1",
+    "request": "^2.69.0",
+    "rimraf": "^2.5.2"
+  }
+}

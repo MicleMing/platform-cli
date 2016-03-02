@@ -1,0 +1,77 @@
+#!/usr/bin/env node
+
+var path = require('path');
+var exists = require('fs').existsSync;
+
+var chalk = require('chalk');
+var rm = require('rimraf');
+var download = require('download-git-repo');
+
+var program = require('commander');
+var prompt = require('../lib/prompt');
+var logger = require('../lib/logger');
+var Spinner = require('../lib/spinner');
+
+program
+    .usage('<template-name> [project-name]')
+    .option('-c, --clone', 'use git clone');
+
+program.on('--help', function () {
+    console.log('  Examples:');
+    console.log();
+    console.log(chalk.gray('    # create a new project with an  template'));
+    console.log('    $ platform init webpack my-project');
+    console.log();
+    console.log(chalk.gray('    # create a new project straight from a github template'));
+    console.log('    $ platform platform username/repo my-project');
+    console.log();
+});
+
+program.parse(process.argv);
+
+if (process.argv.length < 1) {
+    return program.help();
+}
+
+var template = program.args[0];
+debugger
+var rawName = program.args[1];
+var inPlace = !rawName || rawName === '.';
+var name = inPlace ? path.relative('../', process.cwd()) : rawName;
+var dir = program.directory;
+var to = path.resolve(rawName || '.');
+var clone = program.clone || false;
+
+// 选择模板
+if (!template) {
+    console.log();
+    console.log(chalk.red('  Please choose template'));
+    program.help();
+}
+
+if (!exists(to)) {
+    prompt({
+        tip: inPlace
+            ? 'Generate project in current directory(y/n)?'
+            : 'Target directory exists. Continue?(y/n)',
+        handler: run.bind(this, template)
+    })
+}
+else {
+    run();
+}
+
+function run (template) {
+    var spinner = new Spinner('download platform...');
+    spinner.start();
+
+    var template = path.join('MicleMing', template);
+    download(template, to, {clone: clone}, function (err) {
+        spinner.stop();
+        if (err) {
+            logger.fatal(err);
+        }
+        console.log();
+        logger.success('Gennerated in "%s".', name);
+    })
+}

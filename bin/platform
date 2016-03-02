@@ -1,0 +1,8 @@
+#!/usr/bin/env node
+
+var program = require('commander')
+    .version(require('../package').version)
+    .usage('<command> [options]')
+    .command('init', 'generate a new project from a template')
+    .command('make', 'create boilerplate for project ')
+    .parse(process.argv);
