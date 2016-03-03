@@ -2,13 +2,17 @@
   "name": "platform-cli",
   "version": "1.0.0",
   "description": "generator project prototype",
-  "main": "index.js",
+  "preferGlobal": true,
+  "bin": {
+    "platform": "bin/platform"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "platform"
   ],
+  "main": "lib/index.js",
   "author": "lanmingming",
   "license": "ISC",
   "dependencies": {

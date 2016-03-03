@@ -34,7 +34,6 @@ if (process.argv.length < 1) {
 }
 
 var template = program.args[0];
-debugger
 var rawName = program.args[1];
 var inPlace = !rawName || rawName === '.';
 var name = inPlace ? path.relative('../', process.cwd()) : rawName;
@@ -58,13 +57,13 @@ if (!exists(to)) {
     })
 }
 else {
-    run();
+    run(template);
 }
 
 function run (template) {
     var spinner = new Spinner('download platform...');
     spinner.start();
-
+    console.log('template:' + template);
     var template = path.join('MicleMing', template);
     download(template, to, {clone: clone}, function (err) {
         spinner.stop();

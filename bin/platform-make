@@ -7,8 +7,9 @@ var path = require ('path');
 var fs = require ('fs');
 var mkdirp = require ('mkdirp');
 
-var BOILERLATER_DIR	= '../vue-boilerplate';
-var BOILERLATER_CONFIG = '../vue-boilerplate/config.json';
+var BOILERLATER_DIR	= path.join(path.dirname(__dirname),'vue-boilerplate');
+var BOILERLATER_CONFIG = path.join(path.dirname(__dirname),'vue-boilerplate', 'config.json');
+console.log(__dirname);
 
 process.on('exit', function () {
 	console.log();
@@ -39,7 +40,7 @@ if (program.list) {
 else if (program.args.length > 1) {
 	// generate
 	// make component wt1
-	generateFile(program.args[1], program.args[2]);
+	generateFile(program.args[0], program.args[1]);
 }
 else {
 	program.help();
@@ -98,7 +99,8 @@ function generateFile (type, name) {
 		mkdirp(targetDir);
 	}
 	if (fs.existsSync(targetFilePath)) {
-		console.warn('operation fail, because this file has exists');
+		console.log();
+		console.warn(chalk.green('operation fail, because this file has exists'));
 	}
 	else {
 		fs.writeFileSync(targetFilePath, fs.readFileSync(genSourcePath));
