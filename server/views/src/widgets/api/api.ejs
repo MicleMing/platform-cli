@@ -1,0 +1,78 @@
+<form class="api-config">
+	<div class="form-group">
+		<label for="domain">API:</label>
+		<input id="domain" placeholder="例如: test/hello (不需要输入域名)" class="form-control form-mock">
+		<button class="btn params-api">params</button>
+	</div>
+
+	<div class='req-query'>
+		<span class="query-title">query:</span>
+		<div class="params">
+			<div class="form-group">
+				<input class="form-control form-mock" placeholder="查询参数">
+                <select class="form-select">
+                    <option value="">选择数据类型</option>
+                    <option value="string">string</option>
+                    <option value="number">number</option>
+                </select>
+                <span class="caret"></span>
+                <span class="remove">删除</span>
+			</div>
+		</div>
+		<div class="addParam">
+			<button class="btn">add</button>
+		</div>
+	</div>
+
+	<div class='req-body'>
+		<span class="body-title">body:</span>
+		<div class="params">
+			<div class="form-group">
+				<input class="form-control form-mock" placeholder="查询参数">
+                <select class="form-select">
+                    <option value="">选择数据类型</option>
+                    <option value="string">string</option>
+                    <option value="number">number</option>
+                </select>
+                <span class="caret"></span>
+                <span class="remove">删除</span>
+			</div>
+		</div>
+		<div class="addParam">
+			<button class="btn">add</button>
+		</div>
+	</div>
+
+	<div class="httpMethod">
+        <div class="form-group">
+            <label>http:</label>
+            <div class="form-radio">
+                <input id="get" type="radio" name="httpMethod" value="GET" checked>
+                <label for="get">GET</label>
+            </div>
+            <div class="form-radio">
+                <input id='post' type="radio" name="httpMethod" value="POST">
+                <label for="post">POST</label>
+            </div>
+        </div>
+	</div>
+
+	<div class="response">
+		<div class="form-group">
+			<label>response:</label>
+			<div id="responseJSON"></div>
+			<p class="attention">注意：请使用标准的JSON格式</p>			
+		</div>
+	</div>
+
+	<div class="response-count">
+		<div class="form-group">
+			<label for="count">返回数据数量:</label>
+			<input id="count" placeholder="例如：100 (返回100条数据)" class="form-control form-mock">			
+		</div>
+	</div>
+
+	<div class="submit">
+		<button  class="btn"> 提交</button>
+	</div>
+</form>

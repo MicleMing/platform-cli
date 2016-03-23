@@ -1,0 +1,26 @@
+{
+  "name": "mock-api",
+  "version": "1.0.0",
+  "description": "mock api",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "koa",
+    "mock",
+    "api"
+  ],
+  "author": "lanmingming",
+  "license": "ISC",
+  "devDependencies": {
+    "del": "^2.2.0",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-less": "^3.0.5",
+    "gulp-wrap-amd": "^0.5.0"
+  },
+  "dependencies": {
+    "jquery": "^2.2.1"
+  }
+}

@@ -1,0 +1,32 @@
+#!/usr/bin/env node
+
+var chalk = require('chalk');
+var mock = require('../lib/server.js');
+
+process.on('exit', function () {
+	console.log();
+});
+
+var program = require('commander');
+
+program
+	.usage('mock <type> [port]')
+	.option('-p, --port', 'listen on localhost:[port]')
+	.parse(process.argv);
+
+program.on('--help', function () {
+    console.log('  Examples:');
+    console.log();
+    console.log(chalk.gray('    # listen on port 3100'));
+    console.log('    $ platform mock -p 3100');
+    console.log();
+});
+
+if (program.port) {
+	console.log('here', program.port)
+	mock(program.port);
+}
+else {
+	program.help();
+}
+

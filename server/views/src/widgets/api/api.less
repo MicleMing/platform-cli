@@ -1,0 +1,74 @@
+.api-config {
+	
+	.form-group {
+		#domain {
+			display: inline-block;
+			width: 345px;
+		}
+		label,
+		span {
+			margin-right: 8px;
+		}
+		.form-mock {
+			border-top: 0 none;
+			border-left: 0 none;
+			border-right: 0 none;
+			box-shadow: none;
+			outline: none;
+			&:focus,
+			&:active {
+				box-shadow: none;
+				outline: none;
+			}
+		}
+	}
+	.req-query,
+	.req-body {
+		margin-bottom: 20px;
+		.query-title,
+		.body-title {
+			margin-right: 8px;
+			display: inline-block;
+			width: 90px;
+			text-align: right;
+			vertical-align: top;
+		}
+		.params {
+			display: inline-block;
+			.form-control {
+				display: inline-block;
+				width: 160px;
+				margin-left: 6px;
+				margin-right: 0;
+			}
+			.form-select {
+				margin-left: 20px;
+			}
+			.remove {
+				cursor: pointer;
+				&:hover {
+					color: #ff0000;
+					text-decoration: underline;
+				}
+			}
+		}
+		.addParam {
+			margin-left: 108px;
+			width: 70px;
+		}
+	}
+	.response {
+		#responseJSON {
+			width: 400px;
+			height: 200px;
+			border-color: #dddddd;
+		}
+		.attention {
+			color: #FF0000;
+			padding: 24px;
+			margin-left: 75px;
+			font-size: 12px;
+		}
+	}
+
+}

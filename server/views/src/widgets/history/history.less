@@ -1,0 +1,46 @@
+.history {
+	.history-head {
+		font-size: 16px;
+		padding: 12px;
+		background: #EFECEC;
+		box-shadow: #ddd 6px 4px 5px;
+
+		.remove-all {
+			font-size: 12px;
+			padding-top: 10px;
+			float: right;
+			cursor: pointer;
+		}
+	}
+	.list-group {
+
+		height: 700px;
+		overflow: scroll;
+		box-shadow: #ddd 6px 4px 5px;
+		padding: 24px 0 24px 24px;
+
+		.list-group-item {
+			margin-bottom: 0;
+			border: 0;
+			border-bottom: 1px solid #ddd;
+			background: #FaFaFa;
+
+			&:hover{
+				background-color: #ddd;
+			}
+			&.active {
+				background-color: #ddd;
+			}
+			.method {
+				font-size: 14px;
+				font-weight: bold;
+				padding-right: 1em;
+			}
+			.remove {
+				cursor: pointer;
+				float: right;
+				font-family: fantasy;
+			}
+		}
+	}
+}
