@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 var chalk = require('chalk');
-var mock = require('../lib/server.js');
+var child = require('child_process');
+var path = require('path');
 
 process.on('exit', function () {
 	console.log();
@@ -22,11 +23,20 @@ program.on('--help', function () {
     console.log();
 });
 
-if (program.port) {
-	console.log('here', program.port)
-	mock(program.port);
+if (program.port && /^\d+$/g.test(program.args[0])) {
+
+	process.env.port = program.args[0];
+
+	console.log('Server is running on port: ' + process.env.port);
+
+	child.execFile('node', ['--harmony', './lib/server.js'], function (error, stdout, stderr) {
+		console.log(stdout);
+		console.log(error);
+	});
 }
 else {
+	console.log();
+	console.log(chalk.green('  please input a valid port'));
 	program.help();
 }
 

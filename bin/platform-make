@@ -94,9 +94,9 @@ function generateFile (type, name) {
 
 	var targetFilePath = path.join(cwd, name);
 	var targetDir = path.dirname(targetFilePath);
-
 	if (!fs.existsSync(targetDir)) {
-		mkdirp(targetDir);
+
+		mkdirp.sync(targetDir);
 	}
 	if (fs.existsSync(targetFilePath)) {
 		console.log();
