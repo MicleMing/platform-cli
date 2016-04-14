@@ -14,11 +14,11 @@ module.exports = {
 	registermock: function *() {
 		var attribute = this.request.body;
 		var api = attribute['api'];
-		var params = attribute['params'].filter(function (item) {
+		var params = (attribute['params'] || []).filter(function (item) {
 			return item.param !== '';
 		});
 
-		var body = attribute['body'].filter(function (item) {
+		var body = (attribute['body'] || []).filter(function (item) {
 			return item.param !== '';
 		});
 

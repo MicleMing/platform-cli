@@ -124,12 +124,16 @@ module.exports = {
 			// console.log(response)
 			var json = JSON.parse('{"data|' + count + '":[' + response + ']}');
 
+			json['errno'] = 0;
 			var mockData = Mock.mock(json);
-
-			this.body = mockData;			
+			
+			this.set("Access-Control-Allow-Origin", "*");
+			this.response.status = 200;
+			this.body = mockData;
 		}
 		else {
 			this.body = mockMsg.error;
+			this.response.status = 500;
 		}
 	}
 }

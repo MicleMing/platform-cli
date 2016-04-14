@@ -29,10 +29,12 @@ if (program.port && /^\d+$/g.test(program.args[0])) {
 
 	console.log('Server is running on port: ' + process.env.port);
 
-	child.execFile('node', ['--harmony', './lib/server.js'], function (error, stdout, stderr) {
+	var scriptPath = path.join(path.dirname(__dirname), 'lib/server');
+	child.execFile('node', ['--harmony', scriptPath], function (error, stdout, stderr) {
 		console.log(stdout);
 		console.log(error);
 	});
+	// child.fork('../lib/server.js', ['--harmony']);
 }
 else {
 	console.log();

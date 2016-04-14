@@ -4,7 +4,12 @@
   "description": "generator project prototype",
   "preferGlobal": true,
   "bin": {
-    "platform": "bin/platform"
+    "platform": "bin/platform",
+    "pf": "bin/platform",
+    "pf-init": "bin/platform-init",
+    "pf-make": "bin/platform-make",
+    "pf-mock": "bin/platform-mock",
+    "server": "lib/server.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
