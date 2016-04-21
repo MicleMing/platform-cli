@@ -11,6 +11,10 @@ module.exports = {
 		yield this.render('pages/home/index');
 	},
 
+	proxy: function *() {
+		yield this.render('pages/proxy/proxy');
+	},
+	
 	registermock: function *() {
 		var attribute = this.request.body;
 		var api = attribute['api'];
@@ -35,7 +39,6 @@ module.exports = {
 			}
 			return;
 		}
-		
 		this.models.lists.setApi(api);
 		this.models.lists.setParams(params);
 		this.models.lists.setBody(body);

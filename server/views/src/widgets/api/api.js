@@ -5,7 +5,10 @@
  */
 
 $(function () {
-
+	var record = {
+		status: 'new',
+		id: -1
+	};
 	var domain = $('input#domain');
 	// req-params
 	var reqParams = $('.api-config .req-query .params');
@@ -151,6 +154,17 @@ $(function () {
 
 		var _id = Date.now();
 		APIList[_id] = data;
+
+		if (record.status === 'history') {
+			var hisId = record.id;
+			APIList[hisId] = null;
+			delete APIList[hisId];
+
+			record = {
+				status: 'new',
+				id: -1
+			};
+		}
 		storage.setItem('APIList', JSON.stringify(APIList));
 
 		// 原生 storage 事件在大部分浏览器中只能在另外的窗口触发
@@ -164,6 +178,12 @@ $(function () {
 	addEvent('apiDetail', function (e) {
 		var storage = window.localStorage;
 		var id = e.detail.id;
+
+		record = {
+			status: e.detail.status, // 全局变量， 表示是否从历史纪录中取出的数据
+			id: id
+		};
+
 		var APIList = JSON.parse(storage.getItem('APIList'));
 		var apiDetail = APIList[id];
 

@@ -26,9 +26,9 @@ $(function () {
 
 		var keys = Object.keys(APIList);
 		keys.sort(function (cur, next) {
-			return cur < next;
+			return next - cur;
 		});
-
+		debugger
 		var createContent = function (data, id) {
 			var str = '<div class="list-group-item" data-id=' + id + '>' +
 							'<span class="method">' + data.method + '</span>' +
@@ -75,7 +75,8 @@ $(function () {
 			var id = target.data('id');
 			var event = new CustomEvent("apiDetail", {
 				detail: {
-					id: id
+					id: id,
+					status: 'history'
 				}
 			});
 

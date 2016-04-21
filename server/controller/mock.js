@@ -34,11 +34,10 @@ var _checkRequest = function (req, records) {
 
 	// console.log('records', records);
 	// console.log('mockUrl', mockUrl)
-
+	debugger;
 	var record = records.filter(function (record) {
 		return record._reg.test(mockUrl);
 	});
-
 	return record[0];
 
 };
@@ -117,7 +116,6 @@ module.exports = {
 		var mockMsg = _handlerError.call(this);
 
 		if ('record' in mockMsg) {
-			debugger;
 			record = mockMsg.record;
 			count = record.count;
 			response = record.response.replace(/'/g, '"');

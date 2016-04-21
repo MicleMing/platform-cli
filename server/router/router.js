@@ -15,9 +15,12 @@ module.exports = function (app) {
 
 	// main
 	
-	router.get('/', siteController.index);
+	router.get('/home', siteController.index);
 	router.post('/registermock', siteController.registermock);
 
+	// proxy
+	router.get('/proxy', siteController.proxy);
+	
 	// mock
 	router.get('/mock/*', mockController.mock);
 	router.post('/mock/*', mockController.mock);

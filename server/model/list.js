@@ -40,7 +40,7 @@ var _createReg = function (record) {
 proto.checkId = function (id) {
 	return this.records.filter(function (record) {
 		return record['_Id'] == id;
-	})
+	})[0];
 };
 
 proto.getRecords = function () {
@@ -79,7 +79,8 @@ proto.save = function () {
 
 	var checkRecord;
 	if (checkRecord = this.checkId(target['_Id'])) {
-		this.records.splice(checkRecord, 1, target);
+		var index = this.records.indexOf(checkRecord);
+		this.records.splice(index, 1, target);
 	}
 	else {
 		this.records.push(target);
