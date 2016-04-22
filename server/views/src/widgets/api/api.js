@@ -193,6 +193,12 @@ $(function () {
 	function cloneTarge (target, params) {
 		var cloneNode = target.children(':first').clone();
 		target.empty();
+		if (!params.length) {
+			params = [{
+				param: '',
+				validate: ''
+			}]
+		}
 		params.forEach(function (item) {
 			cloneNode.find('input').val(item.param);
 			cloneNode.find('select').val(item.validate);
@@ -251,5 +257,36 @@ $(function () {
 		
 		cloneTarge(reqParams, queryParams)
 	});
+
+	var newAPI = $('.form-group .new-api');
+
+	newAPI.on('click', function (e) {
+		e.preventDefault();
+		record = {
+			status: 'new',
+			id: -1
+		};
+
+		domain.val('');
+		reqParams.children().each(function (index) {
+			if (index == 0) {
+				$(this).children('input').val('');
+				$(this).children('select').val('');
+			}
+			else {
+				$(this).remove();
+			}
+		});
+		reqBody.children().each(function (index) {
+			if (index == 0) {
+				$(this).children('input').val('');
+				$(this).children('select').val('');
+			}
+			else {
+				$(this).remove();
+			}
+		});
+		responseEditor.setValue('');
+	})
 })
 
