@@ -119,9 +119,8 @@ module.exports = {
 			record = mockMsg.record;
 			count = record.count;
 			response = record.response.replace(/'/g, '"');
-			// console.log(response)
-			var json = JSON.parse('{"data|' + count + '":[' + response + ']}');
 
+			var json = JSON.parse(response)
 			json['errno'] = 0;
 			var mockData = Mock.mock(json);
 			

@@ -23,9 +23,7 @@ var _createId = function (record) {
 	return [
 				record.api,
 				_sortAndConcat(record.params),
-				_sortAndConcat(record.body),
-				JSON.stringify(record.response), 
-				record.count
+				_sortAndConcat(record.body)
 			].join('&');
 };
 

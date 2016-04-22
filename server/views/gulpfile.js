@@ -62,7 +62,7 @@ gulp.task('dealLib', function () {
 			   });
 
 	var stream = gulp.src(libs.concat([
-			path.join(src, 'lib/js/ace-builds/src/ace.js')
+			path.join(src, 'lib/js/ace/ace.js')
 		]));
 
 	stream
