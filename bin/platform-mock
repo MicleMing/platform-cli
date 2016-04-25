@@ -5,15 +5,15 @@ var child = require('child_process');
 var path = require('path');
 
 process.on('exit', function () {
-	console.log();
+    console.log();
 });
 
 var program = require('commander');
 
 program
-	.usage('mock <type> [port]')
-	.option('-p, --port', 'listen on localhost:[port]')
-	.parse(process.argv);
+    .usage('mock <type> [port]')
+    .option('-p, --port', 'listen on localhost:[port]')
+    .parse(process.argv);
 
 program.on('--help', function () {
     console.log('  Examples:');
@@ -25,20 +25,20 @@ program.on('--help', function () {
 
 if (program.port && /^\d+$/g.test(program.args[0])) {
 
-	process.env.port = program.args[0];
+    process.env.port = program.args[0];
 
-	console.log('Server is running on port: ' + process.env.port);
+    console.log('Server is running on port: ' + process.env.port);
 
-	var scriptPath = path.join(path.dirname(__dirname), 'lib/server');
-	child.execFile('node', ['--harmony', scriptPath], function (error, stdout, stderr) {
-		console.log(stdout);
-		console.log(error);
-	});
-	// child.fork('../lib/server.js', ['--harmony']);
+    var scriptPath = path.join(path.dirname(__dirname), 'lib/server');
+    child.execFile('node', ['--harmony', scriptPath], function (error, stdout, stderr) {
+        console.log(stdout);
+        console.log(error);
+    });
+    // child.fork('../lib/server.js', ['--harmony']);
 }
 else {
-	console.log();
-	console.log(chalk.green('  please input a valid port'));
-	program.help();
+    console.log();
+    console.log(chalk.green('  please input a valid port'));
+    program.help();
 }
 

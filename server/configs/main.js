@@ -15,25 +15,25 @@ var host = 'http://localhost' + (port !== 80 ? ':' + port : '');
 var DEBUG = env !== 'production';
 
 module.exports = {
-	name: 'mockApi',
-	port: port,
-	env: env,
-	bodyparser: {
-		//multipart: true
-	},
-	koaBody: {
-		formidable: {
-			uploadDir: __dirname
-		},
-		multipart: true
-	},
-	static: {
-		directory: path.resolve(__dirname, '../public')
-	},
-	view: {
-		viewExt: 'ejs',
-		layout: false,
-		cache: false,
-		root: path.resolve(__dirname, '../views/dist/')
-	}
+    name: 'mockApi',
+    port: port,
+    env: env,
+    bodyparser: {
+        //multipart: true
+    },
+    koaBody: {
+        formidable: {
+            uploadDir: __dirname
+        },
+        multipart: true
+    },
+    static: {
+        directory: path.resolve(__dirname, '../public')
+    },
+    view: {
+        viewExt: 'ejs',
+        layout: false,
+        cache: false,
+        root: path.resolve(__dirname, '../views/dist/')
+    }
 }

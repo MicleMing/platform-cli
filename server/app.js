@@ -12,7 +12,7 @@ var List = require('./model/list');
 
 
 var app = module.exports = koa();
-render(app, configs.view)
+render(app, configs.view);
 
 // app.use(require('koa-bodyparser')(configs.bodyparser));
 app.use(koaBody(configs.koaBody));
@@ -26,10 +26,10 @@ app.use(router());
 
 
 if (!module.parent) {
-	app.listen(configs.port, function () {
-		console.log('Server runnin on port: ' + configs.port);
-	})
+    app.listen(configs.port, function () {
+        console.log('Server runnin on port: ' + configs.port);
+    })
 }
 else {
-	module.exports = app;
+    module.exports = app;
 }
