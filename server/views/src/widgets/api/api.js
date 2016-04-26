@@ -243,11 +243,12 @@ $(function () {
 
 		var api = domain.val();
 
-		api = api.replace(/(.*\/\/[^\/\?]+)/g, '');
+		api = api.replace(/^[^(\/\/)]*\/\/([^\/\?]+)/, '');
 
 		var path = api.split('?')[0];
 		var query = api.split('?')[1];
 
+		path = path.substring(0, 1) == '/' ? path.substring(1) : path;
 		domain.val(path ? path : '/');
 
 		var queryParams = query ? query.split('&').map(function (item) {
