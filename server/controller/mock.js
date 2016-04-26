@@ -46,63 +46,58 @@ var _checkMethod = function (req, record) {
     return method === record.method;
 };
 
-var _checkParams = function (req, records) {
-    var queryParams = (req.querystring.split('&')
-        .map(function (item) {
-            return item.split('=')[0]
-        }) || [])
+
+// 通过所有参数检查
+var _checkParams = function (req, record) {
+    var queryParams = (
+            req.querystring.split('&')
+            .map(function (item) {
+                return item.split('=')[0]
+            }) || []
+        )
         .filter(function (i) {
             return i;
         });
-        debugger;
-    var querySource = records.map(function (record) {
-        var params = [];
-        (record['params'] || []).forEach(function (i) {
-            params.push(i.param);
-        });
-        return params;
+    var querySource = record.params.map(function (item) {
+        return item.param;
     });
-    return querySource.some(function (query) {
-        return util.contain(query, queryParams);
-    })
+    return util.contain(querySource, queryParams);
 };
 
-var _checkBody = function (req, records) {
+var _checkBody = function (req, record) {
     var bodyParams = req.body || [];
     bodyParams = Object.keys(bodyParams);
-    var bodySource = records.map(function (record) {
-        var params = [];
-        (record['body'] || []).forEach(function (i) {
-            params.push(i.param);
-        });
-        return params;
+    var bodySource = record.body.map(function (item) {
+        return item.param;
     });
-
-    return bodySource.some(function (body) {
-        return util.contain(body, bodyParams);
-    });
+    return util.contain(bodySource, bodyParams);
 };
 
 var _handlerError = function () {
     var mockError = [];
-    var records = this.models.lists.getRecords();
+    var recordsModel = this.models.lists;
+    var records = recordsModel.getRecords();
     var request = this.request;
 
+    // 获取api
     var record = _checkRequest(request, records);
+    if (!record) {
+        var api = request.path.replace(/^\/mock\//, '');
+        var similarRecord = recordsModel.getByApi(api)[0];
 
-    if (record) {
-        if (!_checkMethod(request, record)) {
+        if (!similarRecord) {
+            return {error: ['该接口还未进行mock, 请先注册']};
+        }
+
+        if (!_checkMethod(request, similarRecord)) {
             mockError.push('http 请求方法错误');
         };
-    }
-    if (!_checkParams(request, records)) {
-        mockError.push('请求参数错误');
-    }
-    if (!_checkBody(request, records)) {
-        mockError.push('请求body错误')
-    };
-  
-    if (mockError.length > 0) {
+        if (!_checkParams(request, similarRecord)) {
+            mockError.push('请求参数错误');
+        }
+        if (!_checkBody(request, similarRecord)) {
+            mockError.push('请求body错误')
+        }
         return {error: mockError};
     }
     else {
@@ -114,14 +109,13 @@ module.exports = {
 
     mock: function *(next) {
         var record;
-        var count;
         var response;
 
         var mockMsg = _handlerError.call(this);
 
         if ('record' in mockMsg) {
+            // console.log(mockMsg)
             record = mockMsg.record;
-            count = record.count;
             response = record.response.replace(/'/g, '"');
 
             var json = JSON.parse(response)

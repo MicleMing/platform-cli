@@ -43,7 +43,7 @@ module.exports = {
         this.models.lists.setParams(params);
         this.models.lists.setBody(body);
         this.models.lists.setResponse(attribute['response']);
-        this.models.lists.setCount(parseInt(attribute['count']) || 5);
+        // this.models.lists.setCount(parseInt(attribute['count']) || 5);
         this.models.lists.setMethod(attribute['method']);
         this.models.lists.save();
 

@@ -48,17 +48,29 @@ proto.getRecords = function () {
 proto.setApi = function (api) {
     this.current['api'] = api;
 };
-proto.getApi = function (api) {
-    return this.records[api];
+proto.getByApi = function (api) {
+    return this.records.filter(function (item) {
+        return item.api === api;
+    });
 };
 
 proto.setMethod = function (method) {
     this.current['method'] = method;
 };
+proto.getByMethod = function (method) {
+    return this.records.filter(function (item) {
+        return item.method === method;
+    });
+}
 
 proto.setParams = function (params) {
     this.current['params'] = params;
 };
+
+proto.getByParams = function (params) {
+    // todo
+};
+
 proto.setBody = function (body) {
     this.current['body'] = body;
 };
