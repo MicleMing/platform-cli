@@ -9,7 +9,6 @@ var mkdirp = require ('mkdirp');
 
 var BOILERLATER_DIR = path.join(path.dirname(__dirname),'vue-boilerplate');
 var BOILERLATER_CONFIG = path.join(path.dirname(__dirname),'vue-boilerplate', 'config.json');
-console.log(__dirname);
 
 process.on('exit', function () {
     console.log();
@@ -71,6 +70,8 @@ function generateFile (type, name) {
     var config = JSON.parse(fs.readFileSync(BOILERLATER_CONFIG));
 
     var cwd = process.cwd();
+    var shortMap = config.short;
+    type = shortMap[type];
 
     if (!config.hasOwnProperty(type)) {
         logger.fatal('Unkown generate type: ' + type);
@@ -86,14 +87,21 @@ function generateFile (type, name) {
         logger.fatal('Error: ' + e);
     }
 
-    var type = genObj['type'];
-    var reg = new RegExp(type + '$');
+    var fileType = genObj['type'];
+    var filename = '';
+    var reg = new RegExp(fileType + '$');
     if (!reg.test(name)) {
-        name = name + '.vue';
+        filename = name + fileType;
+    }
+    else {
+        filename = name;
+        name = name.replace(fileType, '');
     }
 
-    var targetFilePath = path.join(cwd, name);
+    var targetFilePath = path.join(cwd, 'src', type + 's', name, filename);
     var targetDir = path.dirname(targetFilePath);
+
+
     if (!fs.existsSync(targetDir)) {
 
         mkdirp.sync(targetDir);
@@ -104,7 +112,7 @@ function generateFile (type, name) {
     }
     else {
         fs.writeFileSync(targetFilePath, fs.readFileSync(genSourcePath));
-        logger.success('Create: ' + chalk.green(name));
+        logger.success('Create ' + type + ': ' + chalk.green(name));
     }
 
 }

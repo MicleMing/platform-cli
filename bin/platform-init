@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
 var path = require('path');
-var exists = require('fs').existsSync;
+var fs = require('fs');
+var exists = fs.existsSync;
+
 
 var chalk = require('chalk');
 var rm = require('rimraf');
@@ -48,7 +50,7 @@ if (!template) {
     program.help();
 }
 
-if (!exists(to)) {
+if (exists(to)) {
     prompt({
         tip: inPlace
             ? 'Generate project in current directory(y/n)?'
@@ -70,6 +72,30 @@ function run (template) {
         if (err) {
             logger.fatal(err);
         }
+        // 修改 package.json
+        var pkgPath = path.join(to, 'package.json');
+        var pkg = fs.readFileSync(pkgPath, 'utf8');
+        pkg.name = rawName;
+
+        var interReg = /<%=(.+?)%>/g;
+        var result = '';
+        var index = 0;
+        var matcher = function (inter, data) {
+            return data[inter];
+        }
+
+        pkg.replace(interReg, function (match, interpolate, offset) {
+            console.log(match)
+            result += pkg.slice(index, offset);
+            index = offset + match.length;
+            result += matcher(interpolate, {
+                name: '"' + rawName + '"'
+            });
+            return match;
+        });
+        result += pkg.slice(index);
+        fs.writeFileSync(pkgPath, result);
+
         console.log();
         logger.success('Gennerated in "%s".', name);
     })
