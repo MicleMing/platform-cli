@@ -65,9 +65,14 @@ else {
 function run (template) {
     var spinner = new Spinner('download platform...');
     spinner.start();
-    console.log('template:' + template);
-    var template = path.join('MicleMing', template);
-    download(template, to, {clone: clone}, function (err) {
+
+    // 读取手脚架配置文件
+    var listPath = path.join(path.dirname(__dirname), 'list.json');
+    var list = JSON.parse(fs.readFileSync(listPath), 'utf8');
+
+    var projectPath = list[template];
+
+    download(projectPath, to, {clone: clone}, function (err) {
         spinner.stop();
         if (err) {
             logger.fatal(err);
@@ -82,10 +87,9 @@ function run (template) {
         var index = 0;
         var matcher = function (inter, data) {
             return data[inter];
-        }
+        };
 
         pkg.replace(interReg, function (match, interpolate, offset) {
-            console.log(match)
             result += pkg.slice(index, offset);
             index = offset + match.length;
             result += matcher(interpolate, {
@@ -93,6 +97,7 @@ function run (template) {
             });
             return match;
         });
+        
         result += pkg.slice(index);
         fs.writeFileSync(pkgPath, result);
 
