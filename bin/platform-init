@@ -14,26 +14,40 @@ var prompt = require('../lib/prompt');
 var logger = require('../lib/logger');
 var Spinner = require('../lib/spinner');
 
+// 读取手脚架配置文件
+var listPath = path.join(path.dirname(__dirname), 'list.json');
+var list = JSON.parse(fs.readFileSync(listPath, 'utf8'));
+
 program
     .usage('<template-name> [project-name]')
-    .option('-c, --clone', 'use git clone');
+    .option('-l, --list', 'list platform template');
 
 program.on('--help', function () {
     console.log('  Examples:');
     console.log();
     console.log(chalk.gray('    # create a new project with an  template'));
-    console.log('    $ platform init webpack my-project');
+    console.log('    $ platform(pf) init {template-type} {my-project}');
     console.log();
-    console.log(chalk.gray('    # create a new project straight from a github template'));
-    console.log('    $ platform platform username/repo my-project');
     console.log();
 });
 
 program.parse(process.argv);
 
-if (process.argv.length < 1) {
+
+if (program.args.length < 1) {
+    if (program.list) {
+        getTemplateList();
+        return;
+    }
+
     return program.help();
 }
+
+if (program.args.length === 1) {
+    console.log(chalk.red('please input project name'));
+    return program.help();
+}
+
 
 var template = program.args[0];
 var rawName = program.args[1];
@@ -62,15 +76,41 @@ else {
     run(template);
 }
 
+
+function getTemplateList () {
+    console.log('TEMPLATE LIST');
+    console.log('____________________________________________________');
+    console.log();
+
+    for (var key in list) {
+        if (list.hasOwnProperty(key)) {
+            var str = (function () {
+                var str = '';
+                var length = 15;
+                while (length--) {
+                    str += ' ';
+                }
+                return str;
+            })();
+            var formatKey = key + str.slice(key.length);
+            console.log(chalk.green(formatKey) + 'platform(pf) init ' + key + ' {project-name}');
+        }
+    }
+    console.log();
+    console.log('____________________________________________________');
+};
+
 function run (template) {
     var spinner = new Spinner('download platform...');
     spinner.start();
 
-    // 读取手脚架配置文件
-    var listPath = path.join(path.dirname(__dirname), 'list.json');
-    var list = JSON.parse(fs.readFileSync(listPath), 'utf8');
-
     var projectPath = list[template];
+
+    if (!projectPath) {
+        console.log(chalk.red(template + ' is invalid or this template has been removed'));
+        getTemplateList();
+        return;
+    }
 
     download(projectPath, to, {clone: clone}, function (err) {
         spinner.stop();
