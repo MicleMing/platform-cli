@@ -102,7 +102,6 @@ function getTemplateList () {
 
 function run (template) {
     var spinner = new Spinner('download platform...');
-    spinner.start();
 
     var projectPath = list[template];
 
@@ -111,6 +110,8 @@ function run (template) {
         getTemplateList();
         return;
     }
+    
+    spinner.start();
 
     download(projectPath, to, {clone: clone}, function (err) {
         spinner.stop();

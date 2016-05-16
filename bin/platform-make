@@ -7,8 +7,9 @@ var path = require ('path');
 var fs = require ('fs');
 var mkdirp = require ('mkdirp');
 
-var BOILERLATER_DIR = path.join(path.dirname(__dirname),'vue-boilerplate');
-var BOILERLATER_CONFIG = path.join(path.dirname(__dirname),'vue-boilerplate', 'config.json');
+var BOILERLATER_DIR;
+var BOILERLATER_CONFIG;
+
 
 process.on('exit', function () {
     console.log();
@@ -34,15 +35,43 @@ program.on('--help', function () {
 
 if (program.list) {
     // 列出可用命令
-    getCommandList();
+    if (getBoilerConfig()) {
+        getCommandList();
+    }
 }
 else if (program.args.length > 1) {
-    // generate
-    // make component wt1
-    generateFile(program.args[0], program.args[1]);
+
+    if (getBoilerConfig()) {
+        // generate
+        // make component wt1
+        generateFile(program.args[0], program.args[1]);        
+    }
+
 }
 else {
     program.help();
+}
+
+function getBoilerConfig () {
+
+    // 获取配置
+    var platformConfig = path.join(path.dirname(process.cwd()), '.platform');
+    if (!fs.existsSync(platformConfig)) {
+        console.log();
+        console.log(chalk.red('please check if you are in "src" or ".platform" is exit '));
+        return false;
+    }
+
+    try {
+        var boilerplate = JSON.parse(fs.readFileSync(platformConfig, 'utf8'));
+        BOILERLATER_DIR = path.join(path.dirname(platformConfig), boilerplate['template']);
+        BOILERLATER_CONFIG = path.join(BOILERLATER_DIR, 'config.json');
+        return true;
+    }
+    catch (e) {
+        console.log(e);
+        return false;
+    }
 }
 
 
@@ -59,8 +88,17 @@ function getCommandList () {
     for (var key in config) {
         console.log(key.charAt(0).toUpperCase() + key.substring(1));
         if (config.hasOwnProperty(key)) {
-            console.log(chalk.gray('    #' + 'desc: ') + config[key].desc);
-            console.log(chalk.gray('    #' + 'sample: ')+ config[key].example);
+            if (key !== 'short') { // 非简写
+                console.log(chalk.green('    #' + 'desc: ') + config[key].desc);
+                console.log(chalk.green('    #' + 'sample: ')+ config[key].example);               
+            }
+            else {
+                for (var complex in config[key]) {
+                    if (config[key].hasOwnProperty(complex)) {
+                        console.log(chalk.green('     ' + complex + '  :  ') + config[key][complex]);
+                    }
+                }
+            }
         }
     }
     console.log(chalk.gray('======================================================'));
@@ -68,7 +106,6 @@ function getCommandList () {
 
 function generateFile (type, name) {
     var config = JSON.parse(fs.readFileSync(BOILERLATER_CONFIG));
-
     var cwd = process.cwd();
     var shortMap = config.short;
     type = shortMap[type];
@@ -98,7 +135,7 @@ function generateFile (type, name) {
         name = name.replace(fileType, '');
     }
 
-    var targetFilePath = path.join(cwd, 'src', type + 's', name, filename);
+    var targetFilePath = path.join(cwd, type + 's', name, filename);
     var targetDir = path.dirname(targetFilePath);
 
 

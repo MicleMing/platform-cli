@@ -1,6 +1,6 @@
 {
   "name": "platform-cli",
-  "version": "1.0.3",
+  "version": "1.0.9",
   "description": "generator project prototype",
   "preferGlobal": true,
   "bin": {
