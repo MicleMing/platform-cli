@@ -1,3 +1,4 @@
 {
-	"vue": "MicleMing/platform"
+	"vue": "MicleMing/platform",
+    "angular": "devyumao/sibon"
 }
