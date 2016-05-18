@@ -58,7 +58,7 @@ function getBoilerConfig () {
     var platformConfig = path.join(path.dirname(process.cwd()), '.platform');
     if (!fs.existsSync(platformConfig)) {
         console.log();
-        console.log(chalk.red('please check if you are in "src" or ".platform" is exit '));
+        console.log(chalk.red('please check if you are in "src" or ".platform" is exist '));
         return false;
     }
 
@@ -89,7 +89,7 @@ function getCommandList () {
         console.log(key.charAt(0).toUpperCase() + key.substring(1));
         if (config.hasOwnProperty(key)) {
             if (key !== 'short') { // 非简写
-                console.log(chalk.green('    #' + 'desc: ') + config[key].desc);
+                console.log(chalk.green('    #' + '  desc: ') + config[key].desc);
                 console.log(chalk.green('    #' + 'sample: ')+ config[key].example);               
             }
             else {
