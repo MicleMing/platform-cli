@@ -17,9 +17,9 @@ var _concatBody = util.sort(function (params) {
 var _checkRequest = function (req, records) {
 
     var method = req.method;
-    var url = req.url.replace(/^(?:\/mock\/)([^\?]*)/g, function (_, url) {
-        return url;
-    });
+
+    var url = req.url.match(/^(?:\/mock\/)([^\?]*)/)[1] || '/';
+    
     var query = req.querystring; // 没有 '?'
 
     var body = req.body ? req.body : [];
