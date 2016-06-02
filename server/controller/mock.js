@@ -17,15 +17,15 @@ var _concatBody = util.sort(function (params) {
 var _checkRequest = function (req, records) {
 
     var method = req.method;
-    var url = req.url.replace(/^(?:\/mock\/)([^\?]*)/g, function (_, url) {
-        return url;
-    });
-    var query = req.querystring; // 没有 '?'
+    
+    var url = req.url.match(/^(?:\/mock\/)([^\?]*)/)[1] || '/';
 
+    var query = req.querystring; // 没有 '?'
     var body = req.body ? req.body : [];
     body = Object.keys(body).map(function (item) {
         return {param: item, value: body[item]}
     });
+
     var queryParams = query.split('&').sort(function (a, b) {
         return a.split('=')[0] > b.split('=')[0];
     });
@@ -37,6 +37,7 @@ var _checkRequest = function (req, records) {
     var record = records.filter(function (record) {
         return record._reg.test(mockUrl);
     });
+    debugger
     return record[0];
 
 };

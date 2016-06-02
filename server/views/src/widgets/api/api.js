@@ -4,7 +4,13 @@
  * @date 2016-3-15
  */
 
-$(function () {
+define(function (require, exports, module) {
+
+	require('./api.less';)
+
+	var $ = require('lib/js/jquery');
+	var ace = require('lib/js/ace');
+
 	var record = {
 		status: 'new',
 		id: -1
@@ -289,5 +295,4 @@ $(function () {
 		});
 		responseEditor.setValue('');
 	})
-})
-
+});

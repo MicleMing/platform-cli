@@ -2,4 +2,7 @@ node_modules
 .DS_Store
 server/node_modules
 server/views/node_modules
+server/views/dist/
 npm-debug.log
+public/
+.gitignore
