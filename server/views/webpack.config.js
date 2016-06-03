@@ -24,7 +24,6 @@ var entry = {};
 pages.forEach(function (page) {
     entry[page] = path.join(src, 'pages', page, page);
 });
-console.log(entry)
 
 module.exports = {
 

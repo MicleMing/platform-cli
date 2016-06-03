@@ -9,10 +9,10 @@ var fs = require('fs');
 
 var gulp = require('gulp');
 var del = require('del');
-var gutil = require('gutil');
-var webpack = require('webpack')
 
-var WEBPACK_CONFIG = require('./webpack.config.js');
+var webpackBuilder = require('./builder.js').builder;
+
+
 var dist = './dist';
 var src = './src';
 
@@ -32,32 +32,14 @@ gulp.task('dealEjs', function () {
     return stream;
 });
 
-function onBuild(done) {
-    return function(err, stats) {
-        if (err) {
-            gutil.log('Error', err);
-            if (done) {
-                done();
-            }
-        } else {
-            Object.keys(stats.compilation.assets).forEach(function(key) {
-                gutil.log('Webpack: output ', key);
-            });
-            if (done) {
-                done();
-            }
-        }
-    }
-}
-
-
 gulp.task('runWebPack', function (done) {
-    return webpack(WEBPACK_CONFIG).run(onBuild(done));
+    return webpackBuilder('normal');
 });
 
 gulp.task('build', ['dealEjs', 'runWebPack']);
 
-gulp.task('watch', ['build'], function () {
+gulp.task('watch', ['dealEjs'], function () {
     var ejsWatcher = gulp.watch('src/**/*.ejs', ['dealEjs']);
+    webpackBuilder('watch')
 });
 
