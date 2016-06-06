@@ -14,10 +14,21 @@ var abs = function (p) {
 
 var dist = abs('dist');
 var src = abs('src');
+var assetsPath = '../../'
 
 var pages = fs.readdirSync(path.join(src, 'pages')).filter(function (i) {
     return i.indexOf('.') !== 0
 });
+
+var genResourceMap = function (resourceMap) {
+    if (!fs.existsSync(dist)) {
+        fs.mkdirSync(dist);
+    }
+    fs.writeFileSync(
+        path.join(dist, 'resource-map.js'),
+        'var resourceMap = (' + resourceMap + ');'
+    );
+};
 
 var entry = {};
 
@@ -33,7 +44,7 @@ module.exports = {
 
     output: {
         path: dist,
-        filename: "pages/[name]/[name].js"
+        filename: "pages/[name]/[name].[hash].js"
     },
 
     resolve: {
@@ -60,13 +71,30 @@ module.exports = {
             }
         ],
         noParse: [
-            /lib(\/|\\)js(\/|\\)ace\1/,
             /lib(\/|\\)js(\/|\\)jquery\1/
         ]
     },
 
     plugins: [
-        new ExtractTextPlugin('pages/[name]/[name].[contenthash].css'),
+        new ExtractTextPlugin('pages/[name]/[name].[hash].css'),
+        function () {
+            this.plugin('done', function (stats) {
+                stats = stats.toJson();
+                var resourceMap = {};
+
+                var addBase = function (asset) {
+                    return assetsPath + asset;
+                };
+                pages.forEach(function (name) {
+                    var assets = stats.assetsByChunkName[name];
+                    resourceMap[name] = (Array.isArray(assets) ? assets : [assets]).map(addBase);
+                });
+
+                genResourceMap(
+                    JSON.stringify(resourceMap, null, 4)
+                );
+            });
+        }
     ]
 }
 

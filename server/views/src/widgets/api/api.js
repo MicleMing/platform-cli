@@ -9,7 +9,7 @@ define(function (require, exports, module) {
     require('./api.less');
 
     var $ = require('lib/js/jquery');
-    var ace = require('lib/js/ace');
+    var ace = require('brace');
 
     var record = {
         status: 'new',

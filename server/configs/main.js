@@ -28,7 +28,7 @@ module.exports = {
         multipart: true
     },
     static: {
-        directory: path.resolve(__dirname, '../public')
+        directory: path.resolve(__dirname, '../views/dist')
     },
     view: {
         viewExt: 'ejs',

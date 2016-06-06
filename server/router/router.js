@@ -14,8 +14,7 @@ module.exports = function (app) {
     var mockController = require('../controller/mock');
 
     // main
-    
-    router.get('/home', siteController.index);
+    router.get('/index', siteController.index);
     router.post('/registermock', siteController.registermock);
 
     // proxy

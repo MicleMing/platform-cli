@@ -1,6 +1,41 @@
 <html>
 <head>
 	<title>mock</title>
-	<link rel="stylesheet" type="text/css" href="script/bundle.css" />
+	<script>
+	    document.write('<script src="../../resource-map.js?' + Date.now() + '"><\/script>');
+	</script>
+
+	<script>
+	    var commonAssets = resourceMap['common'] || [];
+	    var assets = resourceMap['<%=page%>'] || [];
+
+	    // js
+	    var head = document.getElementsByTagName('head')[0];
+	    var insertScript = function (url) {
+	        // 使用appendChild插入script的话defer不靠谱:当从缓存读取js文件的时候，会无法保证在domready之后执行，也无法保证执行顺序
+	        document.write('<script charset="utf-8" defer src="' + url + '"><\/script>');
+	    };
+
+	    // css
+	    var insertStyle = function (url) {
+	        document.write('<link rel="stylesheet" href="' + url + '">');
+	    };
+
+	    // insert assets
+	    var styles = [];
+	    var scripts = [];
+	    commonAssets.concat(assets).forEach(function (asset) {
+	        if (/\.js$/.test(asset)) {
+	            scripts.push(asset);
+	            return;
+	        }
+	        if (/\.css$/.test(asset)) {
+	            styles.push(asset);
+	            return;
+	        }
+	    });
+	    styles.forEach(insertStyle);
+	    scripts.forEach(insertScript);
+	</script>
 </head>
 <body>

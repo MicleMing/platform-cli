@@ -27,5 +27,8 @@
     "url-loader": "^0.5.7",
     "webpack": "^1.13.1",
     "webpack-config": "^0.8.1"
+  },
+  "dependencies": {
+    "brace": "^0.8.0"
   }
 }
