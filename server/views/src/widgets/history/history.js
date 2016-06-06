@@ -4,7 +4,11 @@
  * @date 2016-3-22
  */
 
-$(function () {
+define(function (require, exports, module) {
+
+	require('./history.less');
+
+	var $ = require('lib/js/jquery');
 
 	var storage = window.localStorage || (function () {
 		alert('请升级你的浏览器');

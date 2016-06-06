@@ -4,290 +4,295 @@
  * @date 2016-3-15
  */
 
-$(function () {
-	var record = {
-		status: 'new',
-		id: -1
-	};
-	var domain = $('input#domain');
-	// req-params
-	var reqParams = $('.api-config .req-query .params');
-	var addReqParam = $('.api-config .req-query .addParam');
+define(function (require, exports, module) {
 
-	addReqParam.on('click', function (e) {
-		e.preventDefault();
-		var cloneNode = reqParams.children(':first').clone();
-		cloneNode.children('input').val('');
-		reqParams.append(cloneNode)
-	});
+    require('./api.less');
 
-	reqParams.on('click', '.remove', function (e) {
-		var removeNode = $(this).parent();
-		if (removeNode.siblings().length > 0) {
-			removeNode.remove();
-		}
-		else {
-			removeNode.find('input').val('');
-		}
-	});
+    var $ = require('lib/js/jquery');
+    var ace = require('brace');
 
-	// req-body
-	var reqBody = $('.api-config .req-body .params')
-	var addreqBody = $('.api-config .req-body .addParam');
+    var record = {
+        status: 'new',
+        id: -1
+    };
+    var domain = $('input#domain');
+    // req-params
+    var reqParams = $('.api-config .req-query .params');
+    var addReqParam = $('.api-config .req-query .addParam');
 
-	addreqBody.on('click', function (e) {
-		e.preventDefault();
-		var cloneNode = reqBody.children(':first').clone();
-		cloneNode.children('input').val('');
-		reqBody.append(cloneNode)
-	});
+    addReqParam.on('click', function (e) {
+        e.preventDefault();
+        var cloneNode = reqParams.children(':first').clone();
+        cloneNode.children('input').val('');
+        reqParams.append(cloneNode)
+    });
 
-	reqBody.on('click', '.remove', function (e) {
-		var removeNode = $(this).parent();
-		if (removeNode.siblings().length > 0) {
-			removeNode.remove();
-		}
-		else {
-			removeNode.find('input').val('');
-		}
-	});
+    reqParams.on('click', '.remove', function (e) {
+        var removeNode = $(this).parent();
+        if (removeNode.siblings().length > 0) {
+            removeNode.remove();
+        }
+        else {
+            removeNode.find('input').val('');
+        }
+    });
 
-	// 提交
-	var submitBtn = $('.api-config .submit button');
-	var httpMethod =$('.api-config .httpMethod');
-	// var responseText = $('.api-config .response textarea');
-	var responseCount = $('.api-config .response-count input');
+    // req-body
+    var reqBody = $('.api-config .req-body .params')
+    var addreqBody = $('.api-config .req-body .addParam');
 
-	// response code editor
-	var responseEditor = ace.edit('responseJSON')
+    addreqBody.on('click', function (e) {
+        e.preventDefault();
+        var cloneNode = reqBody.children(':first').clone();
+        cloneNode.children('input').val('');
+        reqBody.append(cloneNode)
+    });
 
-	submitBtn.on('click', function (e) {
-		e.preventDefault();
-		var mock = {};
+    reqBody.on('click', '.remove', function (e) {
+        var removeNode = $(this).parent();
+        if (removeNode.siblings().length > 0) {
+            removeNode.remove();
+        }
+        else {
+            removeNode.find('input').val('');
+        }
+    });
 
-		// api
-		var api = domain.val();
-		if (!api) {
-			alert('请填写API接口');
-			return;
-		}
-		api = api.replace(/(.*\/\/[^\/\?]+)/g, '');
+    // 提交
+    var submitBtn = $('.api-config .submit button');
+    var httpMethod =$('.api-config .httpMethod');
+    // var responseText = $('.api-config .response textarea');
+    var responseCount = $('.api-config .response-count input');
 
-		// 参数
-		var params = (function () {
-			var params = [];
-			reqParams.children().each(function () {
-				var item = $(this);
-				params.push({
-					param: item.find('input').val(),
-					validate: item.find('select').val() 
-				});
-			});
-			var queryStr = api.split('?')[1];
-			var queryArr = queryStr ? queryStr.split('&').map(function (i) {
-				return {param: i.split('=')[0], validate: 'string'}
-			}) : [];
-			return params.concat(queryArr).filter(function (i) {
-				return !!i.param
-			});
-		})();
+    // response code editor
+    var responseEditor = ace.edit('responseJSON')
 
-		// body
-		var body = (function () {
-			var body = [];
-			reqBody.children().each(function () {
-				var item = $(this);
-				body.push({
-					param: item.find('input').val(),
-					validate: item.find('select').val()
-				});
-			});
-			return body.filter(function (i) {
-				return !!i.param;
-			});
-		})();
+    submitBtn.on('click', function (e) {
+        e.preventDefault();
+        var mock = {};
 
-		// http method
-		var http = httpMethod.find('input[name=httpMethod]:checked').val();
+        // api
+        var api = domain.val();
+        if (!api) {
+            alert('请填写API接口');
+            return;
+        }
+        api = api.replace(/(.*\/\/[^\/\?]+)/g, '');
 
-		// response
-		var response = responseEditor.getValue();
+        // 参数
+        var params = (function () {
+            var params = [];
+            reqParams.children().each(function () {
+                var item = $(this);
+                params.push({
+                    param: item.find('input').val(),
+                    validate: item.find('select').val() 
+                });
+            });
+            var queryStr = api.split('?')[1];
+            var queryArr = queryStr ? queryStr.split('&').map(function (i) {
+                return {param: i.split('=')[0], validate: 'string'}
+            }) : [];
+            return params.concat(queryArr).filter(function (i) {
+                return !!i.param
+            });
+        })();
 
-		// mock count
-		var count = responseCount.val();
+        // body
+        var body = (function () {
+            var body = [];
+            reqBody.children().each(function () {
+                var item = $(this);
+                body.push({
+                    param: item.find('input').val(),
+                    validate: item.find('select').val()
+                });
+            });
+            return body.filter(function (i) {
+                return !!i.param;
+            });
+        })();
 
-		var data = {
-			api: api.split('?')[0],
-			method: http,
-			params: params,
-			body: body,
-			response: response,
-			count: count
-		};
-		
-		$.ajax({
-			url: '/registermock',
-			method: 'POST',
-			data: data
-		}).done(function (res) {
-			alert('设置成功');
-			saveAPI(data);
-		}).error(function (err) {
-			alert(err.responseJSON.tip)
-		});
-	});
-	function saveAPI (data) {
-		var storage  = window.localStorage;
-		var APIList = JSON.parse(storage.getItem('APIList') || '{}');
+        // http method
+        var http = httpMethod.find('input[name=httpMethod]:checked').val();
 
-		// 历史纪录不超过50条
-		var keys = Object.keys(APIList);
-		keys.sort(function (cur, next) {
-			return cur < next;
-		});
+        // response
+        var response = responseEditor.getValue();
 
-		if (keys.length > 50) {
-			for (var i = 50; i < keys.length; i++) {
-				delete APIList[keys[i]];
-			}
-		}
+        // mock count
+        var count = responseCount.val();
 
-		var _id = Date.now();
-		APIList[_id] = data;
+        var data = {
+            api: api.split('?')[0],
+            method: http,
+            params: params,
+            body: body,
+            response: response,
+            count: count
+        };
+        
+        $.ajax({
+            url: '/registermock',
+            method: 'POST',
+            data: data
+        }).done(function (res) {
+            alert('设置成功');
+            saveAPI(data);
+        }).error(function (err) {
+            alert(err.responseJSON.tip)
+        });
+    });
+    function saveAPI (data) {
+        var storage  = window.localStorage;
+        var APIList = JSON.parse(storage.getItem('APIList') || '{}');
 
-		if (record.status === 'history') {
-			var hisId = record.id;
-			APIList[hisId] = null;
-			delete APIList[hisId];
+        // 历史纪录不超过50条
+        var keys = Object.keys(APIList);
+        keys.sort(function (cur, next) {
+            return cur < next;
+        });
 
-			record = {
-				status: 'new',
-				id: -1
-			};
-		}
-		storage.setItem('APIList', JSON.stringify(APIList));
+        if (keys.length > 50) {
+            for (var i = 50; i < keys.length; i++) {
+                delete APIList[keys[i]];
+            }
+        }
 
-		// 原生 storage 事件在大部分浏览器中只能在另外的窗口触发
-		var storageEvent = document.createEvent('Event');
-		storageEvent.initEvent('storage', true, true);
-		window.dispatchEvent(storageEvent);
-	};
+        var _id = Date.now();
+        APIList[_id] = data;
 
-	var addEvent = window.addEventListener;
+        if (record.status === 'history') {
+            var hisId = record.id;
+            APIList[hisId] = null;
+            delete APIList[hisId];
 
-	addEvent('apiDetail', function (e) {
-		var storage = window.localStorage;
-		var id = e.detail.id;
+            record = {
+                status: 'new',
+                id: -1
+            };
+        }
+        storage.setItem('APIList', JSON.stringify(APIList));
 
-		record = {
-			status: e.detail.status, // 全局变量， 表示是否从历史纪录中取出的数据
-			id: id
-		};
+        // 原生 storage 事件在大部分浏览器中只能在另外的窗口触发
+        var storageEvent = document.createEvent('Event');
+        storageEvent.initEvent('storage', true, true);
+        window.dispatchEvent(storageEvent);
+    };
 
-		var APIList = JSON.parse(storage.getItem('APIList'));
-		var apiDetail = APIList[id];
+    var addEvent = window.addEventListener;
 
-		fillForm(apiDetail);
-	});
+    addEvent('apiDetail', function (e) {
+        var storage = window.localStorage;
+        var id = e.detail.id;
 
-	function cloneTarge (target, params) {
-		var cloneNode = target.children(':first').clone();
-		target.empty();
-		if (!params.length) {
-			params = [{
-				param: '',
-				validate: ''
-			}]
-		}
-		params.forEach(function (item) {
-			cloneNode.find('input').val(item.param);
-			cloneNode.find('select').val(item.validate);
-			target.append(cloneNode);
-			cloneNode = cloneNode.clone();
-		});			
-	}
+        record = {
+            status: e.detail.status, // 全局变量， 表示是否从历史纪录中取出的数据
+            id: id
+        };
 
-	function fillForm (data) {
-		var api = data.api;
-		var method = data.method;
-		var params = data.params;
-		var body = data.body;
-		var response = data.response;
-		var count = data.count;
+        var APIList = JSON.parse(storage.getItem('APIList'));
+        var apiDetail = APIList[id];
 
-		domain.val(api);
+        fillForm(apiDetail);
+    });
 
-		var elements = httpMethod.find('input[name=httpMethod]');
-		elements.each(function (i) {
-			if (this.value === method) {
-				this.checked = true;
-			}
-		});
+    function cloneTarge (target, params) {
+        var cloneNode = target.children(':first').clone();
+        target.empty();
+        if (!params.length) {
+            params = [{
+                param: '',
+                validate: ''
+            }]
+        }
+        params.forEach(function (item) {
+            cloneNode.find('input').val(item.param);
+            cloneNode.find('select').val(item.validate);
+            target.append(cloneNode);
+            cloneNode = cloneNode.clone();
+        });         
+    }
 
-		cloneTarge(reqParams, params);
-		cloneTarge(reqBody, body);
+    function fillForm (data) {
+        var api = data.api;
+        var method = data.method;
+        var params = data.params;
+        var body = data.body;
+        var response = data.response;
+        var count = data.count;
 
-		responseEditor.setValue(response);
-		responseEditor.moveCursorTo(0);
+        domain.val(api);
 
-		responseCount.val(count);
+        var elements = httpMethod.find('input[name=httpMethod]');
+        elements.each(function (i) {
+            if (this.value === method) {
+                this.checked = true;
+            }
+        });
 
-	}
+        cloneTarge(reqParams, params);
+        cloneTarge(reqBody, body);
 
-	// param API
-	var paramsAPI = $('.form-group .params-api');
+        responseEditor.setValue(response);
+        responseEditor.moveCursorTo(0);
 
-	paramsAPI.on('click', function (e) {
+        responseCount.val(count);
 
-		e.preventDefault();
+    }
 
-		var api = domain.val();
+    // param API
+    var paramsAPI = $('.form-group .params-api');
 
-		api = api.replace(/^[^(\/\/)]*\/\/([^\/\?]+)/, '');
+    paramsAPI.on('click', function (e) {
 
-		var path = api.split('?')[0];
-		var query = api.split('?')[1];
+        e.preventDefault();
 
-		path = path.substring(0, 1) == '/' ? path.substring(1) : path;
-		domain.val(path ? path : '/');
+        var api = domain.val();
 
-		var queryParams = query ? query.split('&').map(function (item) {
-			var itemArr = item.split('=');
-			return {param: itemArr[0], validate: 'string'}
-		}): [{param:'', validate: ''}];
-		
-		cloneTarge(reqParams, queryParams)
-	});
+        api = api.replace(/^[^(\/\/)]*\/\/([^\/\?]+)/, '');
 
-	var newAPI = $('.form-group .new-api');
+        var path = api.split('?')[0];
+        var query = api.split('?')[1];
 
-	newAPI.on('click', function (e) {
-		e.preventDefault();
-		record = {
-			status: 'new',
-			id: -1
-		};
+        path = path.substring(0, 1) == '/' ? path.substring(1) : path;
+        domain.val(path ? path : '/');
 
-		domain.val('');
-		reqParams.children().each(function (index) {
-			if (index == 0) {
-				$(this).children('input').val('');
-				$(this).children('select').val('');
-			}
-			else {
-				$(this).remove();
-			}
-		});
-		reqBody.children().each(function (index) {
-			if (index == 0) {
-				$(this).children('input').val('');
-				$(this).children('select').val('');
-			}
-			else {
-				$(this).remove();
-			}
-		});
-		responseEditor.setValue('');
-	})
-})
+        var queryParams = query ? query.split('&').map(function (item) {
+            var itemArr = item.split('=');
+            return {param: itemArr[0], validate: 'string'}
+        }): [{param:'', validate: ''}];
+        
+        cloneTarge(reqParams, queryParams)
+    });
 
+    var newAPI = $('.form-group .new-api');
+
+    newAPI.on('click', function (e) {
+        e.preventDefault();
+        record = {
+            status: 'new',
+            id: -1
+        };
+
+        domain.val('');
+        reqParams.children().each(function (index) {
+            if (index == 0) {
+                $(this).children('input').val('');
+                $(this).children('select').val('');
+            }
+            else {
+                $(this).remove();
+            }
+        });
+        reqBody.children().each(function (index) {
+            if (index == 0) {
+                $(this).children('input').val('');
+                $(this).children('select').val('');
+            }
+            else {
+                $(this).remove();
+            }
+        });
+        responseEditor.setValue('');
+    })
+});

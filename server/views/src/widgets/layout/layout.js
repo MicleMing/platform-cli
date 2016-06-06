@@ -3,5 +3,5 @@
  */
 
 define(function (require, exports, module) {
-	require('./header.less');
+	require('./layout.less');
 });

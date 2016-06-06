@@ -8,11 +8,11 @@
 module.exports = {
 
     index: function *() {
-        yield this.render('pages/home/index');
+        yield this.render('pages/index/index', {page: 'index'});
     },
 
     proxy: function *() {
-        yield this.render('pages/proxy/proxy');
+        yield this.render('pages/proxy/proxy', {page: 'proxy'});
     },
     
     registermock: function *() {
