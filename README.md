@@ -31,7 +31,7 @@ pf make pg test
 
 #### 开启mock服务
 ``` powershell
-#在本地4000端口开启， 进入 打开 localhost:4000/home 页面
+#在本地4000端口开启， 进入 打开 localhost:4000/index 页面
 pf mock -p 4000
 ```
 
